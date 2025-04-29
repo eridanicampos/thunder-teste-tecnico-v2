@@ -6,12 +6,14 @@ namespace Thunders.TechTest.OutOfBox.Queues
     {
         public virtual async Task SendLocal(object message)
         {
-            await bus.SendLocal(message);
+            var policy = PollyResiliencePolicy.CreatePolicy();
+            await policy.ExecuteAsync(async () => await bus.SendLocal(message));
         }
         
         public virtual async Task Publish(object message)
         {
-            await bus.Publish(message);
+            var policy = PollyResiliencePolicy.CreatePolicy();
+            await policy.ExecuteAsync(async () => await bus.Publish(message));
         }
     }
 }
